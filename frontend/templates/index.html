@@ -799,6 +799,63 @@
         animation: slideUp 0.4s ease-out;
       }
 
+      /* ================================================================
+         RESULTS DASHBOARD
+      ================================================================ */
+      .results-dashboard {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 1.5rem;
+      }
+      .results-col {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      
+      .patient-id-card {
+        background: linear-gradient(135deg, rgba(10, 25, 47, 0.8), rgba(0, 50, 70, 0.6));
+        border: 1px solid rgba(0, 180, 216, 0.3);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .patient-id-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 4px; height: 100%;
+        background: var(--teal-400);
+      }
+      
+      .summary-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      }
+      
+      .viz-dashboard-card {
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(0, 180, 216, 0.2);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: inset 0 0 20px rgba(0, 180, 216, 0.05);
+      }
+      
+      .findings-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+      }
+
+      @media (max-width: 992px) {
+        .results-dashboard { grid-template-columns: 1fr; }
+      }
+
       .report-block-title {
         display: flex;
         align-items: center;
@@ -1053,9 +1110,487 @@
       .divider { height: 1px; background: var(--glass-border); margin: 1.5rem 0; }
 
       /* Scrollbar */
-      ::-webkit-scrollbar { width: 6px; }
-      ::-webkit-scrollbar-track { background: transparent; }
-      ::-webkit-scrollbar-thumb { background: rgba(0, 180, 216, 0.3); border-radius: 3px; }
+      /* ================================================================
+         NAVBAR
+      ================================================================ */
+      .main-navbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 70px;
+        background: rgba(10, 14, 26, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--glass-border);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        text-decoration: none;
+        color: var(--text-primary);
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+      }
+
+      .nav-brand-logo {
+        height: 45px;
+        width: auto;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 212, 232, 0.4);
+      }
+      
+      .nav-brand-text {
+        font-size: 1rem;
+        line-height: 1.2;
+      }
+      
+      .nav-brand-text small {
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: var(--teal-400);
+        display: block;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      @media (max-width: 600px) {
+        .nav-links { display: none; }
+      }
+
+      .nav-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+
+      .nav-link:hover {
+        color: var(--teal-400);
+      }
+
+      .nav-btn {
+        background: linear-gradient(135deg, var(--blue-500), var(--teal-500));
+        color: white;
+        padding: 0.5rem 1.2rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+      }
+
+      .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 119, 182, 0.5);
+      }
+
+      /* ================================================================
+         HERO SECTION
+      ================================================================ */
+      .hero-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 2rem 4rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-container {
+        width: 100%;
+        max-width: 1300px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .hero-content {
+        text-align: left;
+        animation: slideRight 0.8s ease-out;
+      }
+
+      @keyframes slideRight {
+        from { opacity: 0; transform: translateX(-30px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+
+      .hero-image-wrapper {
+        position: relative;
+        animation: floatImg 6s ease-in-out infinite;
+      }
+      
+      .hero-image-wrapper img {
+        width: 100%;
+        max-width: 600px;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0, 180, 216, 0.4), 0 0 0 1px rgba(0, 180, 216, 0.3);
+        display: block;
+        margin: 0 auto;
+      }
+
+      .hero-image-wrapper::after {
+        content: '';
+        position: absolute;
+        inset: -40px;
+        background: radial-gradient(circle, rgba(0, 212, 232, 0.15) 0%, transparent 60%);
+        z-index: -1;
+      }
+
+      @keyframes floatImg {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+      }
+
+      .hero-badge {
+        display: inline-block;
+        padding: 0.5rem 1.2rem;
+        background: rgba(0, 180, 216, 0.15);
+        border: 1px solid rgba(0, 180, 216, 0.4);
+        color: var(--cyan-400);
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        box-shadow: 0 0 15px rgba(0, 180, 216, 0.3);
+      }
+
+      .hero-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(2rem, 3.8vw, 3.5rem);
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(90deg, #fff, var(--cyan-400), var(--blue-400));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .hero-trust-indicators {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      
+      .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+      
+      .trust-item i {
+        color: var(--cyan-400);
+      }
+
+      .hero-desc {
+        font-size: clamp(1rem, 1.2vw, 1.2rem);
+        color: var(--text-secondary);
+        margin-bottom: 2.5rem;
+        line-height: 1.7;
+        max-width: 600px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .hero-primary-btn {
+        padding: 1rem 2.5rem;
+        font-size: 1.05rem;
+        border-radius: 30px;
+        background: linear-gradient(135deg, var(--blue-500), var(--cyan-400));
+        box-shadow: 0 8px 25px rgba(0, 180, 216, 0.4);
+      }
+
+      .hero-primary-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(0, 180, 216, 0.6);
+      }
+
+      .hero-secondary-btn {
+        padding: 1rem 2.5rem;
+        font-size: 1.05rem;
+        border-radius: 30px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: var(--transition);
+      }
+
+      .hero-secondary-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--cyan-400);
+        box-shadow: 0 0 15px rgba(0, 180, 216, 0.2);
+      }
+
+      /* ================================================================
+         FEATURE CARDS
+      ================================================================ */
+      .features-section {
+        padding: 5rem 2rem;
+        background: rgba(10, 14, 26, 0.4);
+        border-top: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--glass-border);
+        margin-bottom: 3rem;
+      }
+      
+      .features-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+      
+      .feature-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius);
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        transition: var(--transition);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+      }
+      
+      .feature-card:hover {
+        background: var(--glass-bg-hover);
+        border-color: rgba(0, 180, 216, 0.3);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 180, 216, 0.15);
+      }
+      
+      .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, var(--blue-400), var(--teal-400));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .feature-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.8rem;
+      }
+      
+      .feature-desc {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      @media (max-width: 900px) {
+        .hero-container { grid-template-columns: 1fr; text-align: center; gap: 2rem; padding-top: 2rem; }
+        .hero-content { text-align: center; }
+        .hero-desc { margin-left: auto; margin-right: auto; }
+        .hero-actions { justify-content: center; }
+      }
+
+      /* ================================================================
+         ABOUT SECTION
+      ================================================================ */
+      .about-section {
+        padding: 5rem 2rem;
+        background: linear-gradient(180deg, transparent, rgba(0, 180, 216, 0.05));
+        position: relative;
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .about-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .about-hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        margin-bottom: 5rem;
+      }
+      .about-hero-img img {
+        width: 100%;
+        border-radius: var(--border-radius);
+        box-shadow: 0 15px 40px rgba(0, 180, 216, 0.2);
+        border: 1px solid rgba(0, 180, 216, 0.2);
+      }
+      .about-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius);
+        padding: 2.5rem;
+        margin-bottom: 3rem;
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+      }
+      .about-card-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--cyan-400);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+      .about-text {
+        color: var(--text-secondary);
+        line-height: 1.8;
+        font-size: 1.05rem;
+      }
+      
+      /* Tech Stack Grid */
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+      }
+      .tech-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--glass-border);
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        transition: var(--transition);
+      }
+      .tech-card:hover {
+        background: rgba(0, 180, 216, 0.05);
+        border-color: rgba(0, 180, 216, 0.3);
+        transform: translateY(-3px);
+      }
+      .tech-icon {
+        font-size: 2.2rem;
+        color: var(--cyan-400);
+        margin-bottom: 1rem;
+      }
+      .tech-name {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+      }
+      .tech-desc {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+      
+      /* Workflow Diagram */
+      .workflow-diagram {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+      }
+      .workflow-step {
+        background: rgba(0, 180, 216, 0.1);
+        border: 1px solid rgba(0, 180, 216, 0.3);
+        border-radius: 8px;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        flex: 1;
+        min-width: 130px;
+        transition: var(--transition);
+      }
+      .workflow-step:hover {
+        background: rgba(0, 180, 216, 0.2);
+        transform: translateY(-3px);
+      }
+      .workflow-step i {
+        font-size: 1.8rem;
+        color: var(--cyan-400);
+        margin-bottom: 0.8rem;
+      }
+      .workflow-step-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      .workflow-arrow {
+        color: var(--text-muted);
+        font-size: 1.2rem;
+      }
+      
+      @media (max-width: 900px) {
+        .about-hero { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+        .workflow-diagram { flex-direction: column; align-items: stretch; }
+        .workflow-arrow { transform: rotate(90deg); text-align: center; margin: 0.5rem 0; }
+      }
+
+      /* Adjust main app container padding */
+      .app-wrapper {
+        padding-top: 0;
+      }
+      #analysis-tool {
+        padding-top: 80px;
+      }
+      /* ================================================================
+         FOOTER DISCLAIMER
+      ================================================================ */
+      .trust-footer {
+        padding: 2rem 0;
+        margin-top: 4rem;
+        background: rgba(10, 14, 26, 0.6);
+        border-top: 1px solid var(--glass-border);
+        text-align: center;
+      }
+      
+      .disclaimer-alert {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 193, 7, 0.1);
+        border: 1px solid rgba(255, 193, 7, 0.3);
+        border-radius: 8px;
+        color: #ffc107;
+        font-size: 0.85rem;
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: left;
+        line-height: 1.4;
+      }
+      
+      .disclaimer-alert i {
+        font-size: 1.5rem;
+      }
     </style>
   </head>
 
@@ -1068,31 +1603,242 @@
     <div class="pulse-ring"></div>
 
     <div class="app-wrapper">
-      <div class="container">
+      
+      <!-- ════════════════════ NAVBAR ════════════════════ -->
+      <nav class="main-navbar">
+        <div class="nav-container">
+          <a href="#" class="nav-brand">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-brand-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGNpcmNsZSBjeD0iMjIuNSIgY3k9IjIyLjUiIHI9IjIyLjUiIGZpbGw9IiMwMDE4MjYiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZmlsbD0iIzAwYjRkOCIgZm9udC1zaXplPSIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuKcljwvdGV4dD48L3N2Zz4='" />
+            <span class="nav-brand-text">
+              Deep Learning-Based<br/>
+              <small>Fetal Ultrasound Analysis</small>
+            </span>
+          </a>
+          <div class="nav-links">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#how-it-works" class="nav-link">How It Works</a>
+            <a href="#analysis-tool" class="nav-link">Analysis Tool</a>
+            <a href="#" class="nav-link" onclick="if(!document.getElementById('resultsCard').classList.contains('hidden')){ document.getElementById('resultsCard').scrollIntoView({behavior:'smooth'}); } else { alert('Please upload and analyze an ultrasound image first to view the results dashboard.'); } return false;">Results</a>
+            <a href="#analysis-tool" class="nav-btn">Start Analysis</a>
+          </div>
+        </div>
+      </nav>
 
-        <!-- ════════════════════ HEADER ════════════════════ -->
-        <header class="site-header">
-          <div class="header-inner">
-            <div class="header-brand">
-              <div class="header-icon">🏥</div>
-              <div class="header-title">
-                <h1>Deep Learning Based Fetal Ultrasound Analysis</h1>
-                <p>Early Detection of Fetal Growth Abnormalities — CNN + RAG + LLM Pipeline</p>
-              </div>
+      <!-- ════════════════════ HERO SECTION ════════════════════ -->
+      <section class="hero-section" id="home" style="background-image: radial-gradient(rgba(0, 180, 216, 0.05) 1px, transparent 1px); background-size: 30px 30px;">
+        <div class="hero-container">
+          <div class="hero-content">
+            <div class="hero-badge">AI-Powered Deep Learning</div>
+            <h1 class="hero-title">Early Detection of<br/>Fetal Growth<br/>Abnormalities</h1>
+            <p class="hero-desc" style="color: var(--text-primary); font-weight: 400;">
+              An AI-powered deep learning system for analyzing fetal ultrasound images and supporting the early identification of potential growth abnormalities.
+            </p>
+            <div class="hero-actions">
+              <a href="#analysis-tool" class="btn btn-primary hero-primary-btn">
+                Start Analysis <i class="fas fa-arrow-right"></i>
+              </a>
+              <a href="#how-it-works" class="hero-secondary-btn">
+                How It Works &rarr;
+              </a>
             </div>
-            <div class="status-bar">
-              <div class="status-item">
-                <div class="status-dot" id="systemStatusDot"></div>
-                <span id="systemStatusText">Checking...</span>
+            <div class="hero-trust-indicators">
+              <div class="trust-item"><i class="fas fa-brain"></i> Deep Learning</div>
+              <div class="trust-item"><i class="fas fa-microscope"></i> Medical Imaging</div>
+              <div class="trust-item"><i class="fas fa-chart-pie"></i> AI Analysis</div>
+              <div class="trust-item"><i class="fas fa-lock"></i> Secure Data</div>
+            </div>
+          </div>
+          <div class="hero-image-wrapper">
+            <img src="{{ url_for('static', filename='hero_bg_medical.jpg') }}" alt="Medical Fetal Ultrasound AI Analysis" />
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════ FEATURES SECTION ════════════════════ -->
+      <section class="features-section" id="how-it-works">
+        <div class="features-container">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-search-plus"></i></div>
+            <h3 class="feature-title">Early Detection</h3>
+            <p class="feature-desc">Support early identification of potential fetal growth abnormalities.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-brain"></i></div>
+            <h3 class="feature-title">AI-Powered Analysis</h3>
+            <p class="feature-desc">Deep learning-based medical image analysis.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-image"></i></div>
+            <h3 class="feature-title">Ultrasound Imaging</h3>
+            <p class="feature-desc">Analyze uploaded fetal ultrasound images.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+            <h3 class="feature-title">Explainable Results</h3>
+            <p class="feature-desc">Present analysis results in a clear and understandable format.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════ ABOUT SECTION ════════════════════ -->
+      <section class="about-section" id="about">
+        <div class="about-container">
+          
+          <!-- About Hero -->
+          <div class="about-hero">
+            <div style="text-align: left;">
+              <div class="hero-badge" style="margin-bottom: 1rem;">ABOUT THE PROJECT</div>
+              <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif; font-weight: 800; line-height: 1.2; background: linear-gradient(90deg, #fff, var(--cyan-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Advancing Fetal Ultrasound Analysis with Deep Learning</h2>
+              <p class="about-text">This project explores the use of deep learning and medical image analysis to support the early identification of potential fetal growth abnormalities from ultrasound images.</p>
+            </div>
+            <div class="about-hero-img">
+              <img src="file:///C:/Users/ksomk/.gemini/antigravity-ide/brain/44dd3d2f-0178-4861-81e9-b0ffade944ea/about_hero_visual_1787553258093.jpg" alt="Medical Neural Network Visualization" />
+            </div>
+          </div>
+
+          <!-- Project Overview -->
+          <div class="about-card">
+            <h3 class="about-card-title"><i class="fas fa-info-circle"></i> About the Project</h3>
+            <p class="about-text">Deep Learning-Based Fetal Ultrasound Analysis is a research-focused system designed to analyze fetal ultrasound images using deep learning techniques. The platform aims to assist in identifying patterns that may be associated with fetal growth abnormalities and present the analysis in an understandable format.</p>
+          </div>
+
+          <!-- Why This Matters -->
+          <div class="about-card">
+            <h3 class="about-card-title"><i class="fas fa-heartbeat"></i> Why Fetal Growth Monitoring Matters</h3>
+            <div class="tech-grid">
+              <div class="tech-card" style="text-align:left; padding: 1.5rem;">
+                <i class="fas fa-search-plus tech-icon" style="font-size: 1.8rem;"></i>
+                <div class="tech-name">Early Identification</div>
+                <div class="tech-desc">Supporting the identification of potential growth-related abnormalities at an early stage.</div>
               </div>
-              <div class="status-item">
-                <i class="fas fa-clock" style="color: var(--teal-400); font-size: 0.7rem;"></i>
-                <span id="live-clock"></span>
+              <div class="tech-card" style="text-align:left; padding: 1.5rem;">
+                <i class="fas fa-image tech-icon" style="font-size: 1.8rem;"></i>
+                <div class="tech-name">Medical Image Analysis</div>
+                <div class="tech-desc">Using computational methods to analyze ultrasound imagery and identify relevant visual patterns.</div>
+              </div>
+              <div class="tech-card" style="text-align:left; padding: 1.5rem;">
+                <i class="fas fa-user-md tech-icon" style="font-size: 1.8rem;"></i>
+                <div class="tech-name">Decision Support</div>
+                <div class="tech-desc">Presenting AI-generated analysis to support, rather than replace, professional clinical judgment.</div>
+              </div>
+              <div class="tech-card" style="text-align:left; padding: 1.5rem;">
+                <i class="fas fa-flask tech-icon" style="font-size: 1.8rem;"></i>
+                <div class="tech-name">Research & Innovation</div>
+                <div class="tech-desc">Exploring the application of deep learning to healthcare and medical imaging.</div>
               </div>
             </div>
           </div>
-          <div class="header-divider"></div>
-        </header>
+
+          <!-- How it Works (Workflow) -->
+          <div class="about-card">
+            <h3 class="about-card-title"><i class="fas fa-project-diagram"></i> How the System Works</h3>
+            <div class="workflow-diagram">
+              <div class="workflow-step">
+                <i class="fas fa-file-image"></i>
+                <div class="workflow-step-title">Ultrasound Image</div>
+              </div>
+              <div class="workflow-arrow"><i class="fas fa-chevron-right"></i></div>
+              <div class="workflow-step">
+                <i class="fas fa-filter"></i>
+                <div class="workflow-step-title">Image Preprocessing</div>
+              </div>
+              <div class="workflow-arrow"><i class="fas fa-chevron-right"></i></div>
+              <div class="workflow-step">
+                <i class="fas fa-network-wired"></i>
+                <div class="workflow-step-title">Deep Learning Analysis</div>
+              </div>
+              <div class="workflow-arrow"><i class="fas fa-chevron-right"></i></div>
+              <div class="workflow-step">
+                <i class="fas fa-microscope"></i>
+                <div class="workflow-step-title">Pattern Detection</div>
+              </div>
+              <div class="workflow-arrow"><i class="fas fa-chevron-right"></i></div>
+              <div class="workflow-step">
+                <i class="fas fa-notes-medical"></i>
+                <div class="workflow-step-title">AI-Assisted Results</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tech Stack -->
+          <div class="about-card">
+            <h3 class="about-card-title"><i class="fas fa-code"></i> Technology Stack</h3>
+            <div class="tech-grid">
+              <div class="tech-card">
+                <i class="fab fa-python tech-icon"></i>
+                <div class="tech-name">Python</div>
+                <div class="tech-desc">Model development</div>
+              </div>
+              <div class="tech-card">
+                <i class="fas fa-brain tech-icon"></i>
+                <div class="tech-name">Deep Learning</div>
+                <div class="tech-desc">CNN Image analysis</div>
+              </div>
+              <div class="tech-card">
+                <i class="fas fa-database tech-icon"></i>
+                <div class="tech-name">FAISS & LLM</div>
+                <div class="tech-desc">RAG & Reporting</div>
+              </div>
+              <div class="tech-card">
+                <i class="fas fa-server tech-icon"></i>
+                <div class="tech-name">Flask API</div>
+                <div class="tech-desc">Backend Architecture</div>
+              </div>
+              <div class="tech-card">
+                <i class="fab fa-html5 tech-icon"></i>
+                <div class="tech-name">HTML/JS</div>
+                <div class="tech-desc">Frontend Interface</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Research Objective -->
+          <div class="about-card" style="box-shadow: 0 0 30px rgba(0, 180, 216, 0.1); border-color: rgba(0, 180, 216, 0.4); text-align: center;">
+            <h3 class="about-card-title" style="justify-content: center;"><i class="fas fa-bullseye"></i> Research Objective</h3>
+            <p class="about-text" style="font-size: 1.2rem; font-style: italic; max-width: 800px; margin: 0 auto;">
+              "The objective of this project is to explore how deep learning-based medical image analysis can assist in the early identification of potential fetal growth abnormalities from ultrasound imagery."
+            </p>
+          </div>
+
+          <!-- Responsible Use -->
+          <div class="about-card" style="background: rgba(255, 193, 7, 0.05); border-color: rgba(255, 193, 7, 0.2);">
+            <h3 class="about-card-title" style="color: #ffc107;"><i class="fas fa-shield-alt"></i> Responsible Use</h3>
+            <p class="about-text" style="color: rgba(255,255,255,0.85);">
+              This project is intended as a research and decision-support prototype. AI-generated analysis should not be considered a medical diagnosis and should not replace evaluation by qualified healthcare professionals.
+            </p>
+          </div>
+
+          <!-- CTA -->
+          <div style="text-align: center; margin-top: 4rem; margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 1rem; font-size: 2rem; font-family: 'Poppins', sans-serif;">Ready to Explore the Analysis?</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Upload an ultrasound image and explore the capabilities of the AI-assisted analysis system.</p>
+            <a href="#analysis-tool" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2.5rem; border-radius: 30px;">
+              Start Analysis <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+
+        </div>
+      </section>
+
+      <div class="container" id="analysis-tool">
+
+        <!-- ════════════════════ SYSTEM STATUS BAR ════════════════════ -->
+        <div class="glass-card mb-2" style="padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-radius: 30px;">
+          <div style="font-size:0.8rem; font-weight:600; color:var(--text-secondary);">
+            <i class="fas fa-microscope" style="color:var(--teal-400); margin-right: 0.5rem;"></i> Analysis Module
+          </div>
+          <div class="status-bar" style="margin:0;">
+            <div class="status-item">
+              <div class="status-dot" id="systemStatusDot"></div>
+              <span id="systemStatusText">Checking...</span>
+            </div>
+            <div class="status-item">
+              <i class="fas fa-clock" style="color: var(--teal-400); font-size: 0.7rem;"></i>
+              <span id="live-clock"></span>
+            </div>
+          </div>
+        </div>
 
         <!-- ════════════════════ MAIN CONTENT ════════════════════ -->
         <main class="main-content">
@@ -1136,7 +1882,9 @@
 
             <!-- Upload Zone -->
             <div class="upload-zone" id="uploadZone">
-              <div class="upload-icon-wrap">🔬</div>
+              <div class="upload-icon-wrap" style="margin-bottom: 1rem;">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 4rem; background: linear-gradient(135deg, var(--blue-400), var(--teal-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+              </div>
               <h4>Upload Ultrasound Image</h4>
               <p>Drag & drop your ultrasound image here, or click to browse</p>
 
@@ -1258,162 +2006,150 @@
             </button>
           </div>
 
-          <!-- ── RESULTS CARD ─────────────────────────────────── -->
-          <div class="glass-card results-section hidden" id="resultsCard">
-            <div class="section-label"><i class="fas fa-stethoscope"></i> Results</div>
-            <div class="section-title">Diagnostic Results</div>
+          <!-- ── RESULTS CARD (DASHBOARD REDESIGN) ─────────────────────────────────── -->
+          <div class="glass-card results-section hidden" id="resultsCard" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+              <h2 style="font-family: 'Poppins', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; background: linear-gradient(90deg, #fff, var(--cyan-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Analysis Results</h2>
+              <p style="color: var(--text-secondary);">Review the AI-assisted analysis generated from the uploaded ultrasound image.</p>
+            </div>
 
-            <!-- Enhanced Image at Top of Results -->
-            <div id="enhancedImageSection" class="hidden" style="margin-bottom: 1.5rem;">
-              <div class="section-label" style="margin-bottom: 0.8rem;"><i class="fas fa-magic"></i> Enhanced Ultrasound Image</div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 1rem; text-align: center;">
-                  <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.06em;">Original Upload</div>
-                  <img id="resultOriginalImg" src="" alt="Original ultrasound" style="width:100%; border-radius:6px; border:1px solid rgba(255,255,255,0.07);" />
+            <div class="results-dashboard">
+              
+              <!-- LEFT COLUMN: Patient Info, Summary, Actions -->
+              <div class="results-col">
+                
+                <!-- Patient Information Card -->
+                <div class="patient-id-card">
+                  <div style="font-size: 0.75rem; color: var(--teal-400); font-weight: 700; text-transform: uppercase; margin-bottom: 0.8rem; letter-spacing: 0.05em;"><i class="fas fa-id-card"></i> Patient Record</div>
+                  <div id="patientInfoText" style="font-size: 1.05rem; font-weight: 500;"></div>
                 </div>
-                <div style="background: rgba(0,119,182,0.12); border: 1px solid rgba(0,180,216,0.3); border-radius: 10px; padding: 1rem; text-align: center;">
-                  <div style="font-size: 0.72rem; font-weight: 700; color: var(--teal-400); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.06em;">✨ AI-Enhanced Image</div>
-                  <img id="resultEnhancedImg" src="" alt="Enhanced ultrasound" style="width:100%; border-radius:6px; border:1px solid rgba(0,180,216,0.4); box-shadow: 0 0 16px rgba(0,180,216,0.2);" />
-                  <div style="font-size: 0.68rem; color: var(--teal-400); margin-top: 0.4rem;">CLAHE + Bilateral Filter + Unsharp Masking</div>
+
+                <!-- Analysis Summary Card -->
+                <div class="summary-card">
+                  <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 1.2rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;"><i class="fas fa-clipboard-check" style="color: var(--cyan-400);"></i> Analysis Summary</div>
+                  
+                  <div class="diag-card" style="margin-bottom: 1rem; background: rgba(0,0,0,0.2); border: none;">
+                    <div class="diag-label">Primary Diagnosis</div>
+                    <div class="diag-value" id="diagLabel" style="font-size: 1.3rem;">—</div>
+                    <div class="confidence-track" style="margin-top: 0.8rem; height: 8px;">
+                      <div class="confidence-fill" id="confBar" style="width: 0%"></div>
+                    </div>
+                    <div class="conf-text" style="font-size: 0.85rem;">Confidence: <strong id="confValue">—</strong></div>
+                  </div>
+
+                  <div class="diag-card" style="background: rgba(0,0,0,0.2); border: none;">
+                    <div class="diag-label">Risk Assessment</div>
+                    <div id="riskBadgeWrap" style="margin-bottom: 0.6rem;"></div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);" id="riskRec">—</div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- Patient info reminder -->
-            <div class="alert alert-info" id="patientInfoBanner" style="margin-bottom: 1.5rem;">
-              <span class="alert-icon">👤</span>
-              <span id="patientInfoText"></span>
-            </div>
-            <div class="diagnosis-grid">
-              <div class="diag-card">
-                <div class="diag-label">Primary Diagnosis</div>
-                <div class="diag-value" id="diagLabel">—</div>
-                <div class="confidence-track">
-                  <div class="confidence-fill" id="confBar" style="width: 0%"></div>
+                <!-- Probability bars -->
+                <div class="summary-card prob-section">
+                  <div class="report-block-title" style="border: none; margin-bottom: 0.5rem;"><i class="fas fa-chart-bar"></i> Confidence Distribution</div>
+                  <div id="probBars"></div>
                 </div>
-                <div class="conf-text">Confidence: <strong id="confValue">—</strong></div>
-              </div>
-              <div class="diag-card">
-                <div class="diag-label">Risk Assessment</div>
-                <div id="riskBadgeWrap" style="margin-bottom: 0.6rem;"></div>
-                <div style="font-size: 0.82rem; color: var(--text-secondary);" id="riskRec">—</div>
-              </div>
-            </div>
 
-            <!-- Probability bars -->
-            <div class="report-block prob-section">
-              <div class="report-block-title"><i class="fas fa-chart-bar"></i> Classification Confidence Distribution</div>
-              <div id="probBars"></div>
-            </div>
-
-            <!-- Report Tabs -->
-            <div class="report-tabs" id="reportTabs">
-              <button class="report-tab active" onclick="switchTab('findings')">🔍 Findings</button>
-              <button class="report-tab" onclick="switchTab('analysis')">👶 Condition</button>
-              <button class="report-tab" onclick="switchTab('risk')">⚠️ Risk</button>
-              <button class="report-tab" onclick="switchTab('recommendations')">📋 Recommendations</button>
-              <button class="report-tab" onclick="switchTab('nutrients')">🥗 Nutrients</button>
-              <button class="report-tab" onclick="switchTab('full')">📄 Full Report</button>
-            </div>
-
-            <!-- Tab Panels -->
-            <div class="tab-panel active" id="tab-findings">
-              <div class="report-block">
-                <div class="report-block-title"><i class="fas fa-search"></i> Detailed Findings & Measurements</div>
-                <div class="report-block-content" id="tabFindings">—</div>
-              </div>
-            </div>
-
-            <div class="tab-panel" id="tab-analysis">
-              <div class="report-block">
-                <div class="report-block-title"><i class="fas fa-baby"></i> Fetal Condition Analysis</div>
-                <div class="report-block-content" id="tabAnalysis">—</div>
-              </div>
-            </div>
-
-            <div class="tab-panel" id="tab-risk">
-              <div class="report-block">
-                <div class="report-block-title"><i class="fas fa-exclamation-triangle"></i> Risk Stratification & Assessment</div>
-                <div class="report-block-content" id="tabRisk">—</div>
-              </div>
-            </div>
-
-            <div class="tab-panel" id="tab-recommendations">
-              <div class="report-block">
-                <div class="report-block-title"><i class="fas fa-clipboard-list"></i> Clinical Recommendations</div>
-                <div class="report-block-content" id="tabRecommendations">—</div>
-              </div>
-            </div>
-
-            <div class="tab-panel" id="tab-nutrients">
-              <div class="report-block">
-                <div class="report-block-title"><i class="fas fa-leaf"></i> Nutritional Recommendations</div>
-                <div class="report-block-content mb-2" id="nutrientDesc" style="margin-bottom: 1rem; padding: 1rem; background: rgba(27,94,32,0.1); border-radius: 8px; border: 1px solid rgba(76,175,147,0.2);"></div>
-                <div class="nutrients-grid" id="nutrientCards"></div>
-                <div class="divider"></div>
-                <div class="report-block-content" id="tabNutrientsRaw" style="font-size:0.78rem; color: var(--text-muted);"></div>
-              </div>
-            </div>
-
-            <div class="tab-panel" id="tab-full">
-              <div class="report-block">
-                <div class="report-block-title"><i class="fas fa-file-medical"></i> Complete Diagnostic Report</div>
-                <div class="report-block-content" id="tabFullReport" style="font-size: 0.78rem; font-family: monospace;"></div>
-              </div>
-            </div>
-
-            <!-- Visualizations -->
-            <div class="divider"></div>
-            <div id="vizSection" class="hidden">
-              <div style="margin-bottom: 1rem;">
-                <div class="section-label"><i class="fas fa-eye"></i> Visualizations</div>
-              </div>
-              <div class="alert alert-warning" style="margin-bottom: 1rem;">
-                <span class="alert-icon">⚠️</span>
-                <span>These AI-generated analysis visualizations are <strong>NOT actual photographs of your baby</strong>. They show which areas the AI focused on.</span>
-              </div>
-              <div class="viz-grid">
-                <div class="viz-card">
-                  <div class="viz-title">📷 Original Ultrasound (B&W Analysis)</div>
-                  <img id="vizOriginal" src="" alt="Original ultrasound" class="viz-img" />
+                <!-- Actions Card -->
+                <div class="summary-card">
+                  <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 1rem;"><i class="fas fa-download"></i> Reports & Actions</div>
+                  <button type="button" class="btn btn-primary btn-full mb-1" id="dlDoctorBtn" onclick="downloadPDF('doctor')" disabled style="border-radius: 8px; font-weight: 600;">
+                    <i class="fas fa-file-medical"></i> Download Medical Report
+                  </button>
+                  <button type="button" class="btn btn-success btn-full mb-2" id="dlPatientBtn" onclick="downloadPDF('patient')" disabled style="border-radius: 8px; font-weight: 600;">
+                    <i class="fas fa-user-injured"></i> Download Patient Report
+                  </button>
+                  <div class="divider"></div>
+                  <button type="button" class="btn btn-secondary btn-full" onclick="resetForm()" style="border-radius: 8px;">
+                    <i class="fas fa-arrow-left"></i> Back to Analysis
+                  </button>
                 </div>
-                <div class="viz-card">
-                  <div class="viz-title">🔥 Model Attention Map (Grad-CAM)</div>
-                  <img id="vizGradcam" src="" alt="Grad-CAM heatmap" class="viz-img" />
-                  <div class="text-muted mt-1">Red/bright = high model focus areas</div>
+                
+              </div> <!-- /Left Col -->
+
+              <!-- RIGHT COLUMN: Visualizations & Findings -->
+              <div class="results-col">
+                
+                <!-- Ultrasound Visualizations -->
+                <div class="viz-dashboard-card">
+                  <div style="font-size: 0.85rem; color: var(--teal-400); font-weight: 600; text-transform: uppercase; margin-bottom: 1rem;"><i class="fas fa-eye"></i> Ultrasound Preview</div>
+                  
+                  <!-- Enhanced Image -->
+                  <div id="enhancedImageSection" class="hidden" style="margin-bottom: 1.5rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                      <div>
+                        <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; text-align: center; margin-bottom: 0.3rem;">Original Upload</div>
+                        <img id="resultOriginalImg" src="" alt="Original ultrasound" style="width:100%; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" />
+                      </div>
+                      <div>
+                        <div style="font-size: 0.65rem; color: var(--cyan-400); text-transform: uppercase; text-align: center; margin-bottom: 0.3rem;">AI-Enhanced</div>
+                        <img id="resultEnhancedImg" src="" alt="Enhanced ultrasound" style="width:100%; border-radius:6px; border:1px solid rgba(0,180,216,0.4);" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Grad-CAM Viz -->
+                  <div id="vizSection" class="hidden">
+                    <div class="divider"></div>
+                    <div style="font-size: 0.85rem; color: var(--teal-400); font-weight: 600; text-transform: uppercase; margin-bottom: 1rem;"><i class="fas fa-brain"></i> AI Analysis Visualization</div>
+                    <div class="alert alert-warning" style="margin-bottom: 1rem; padding: 0.6rem; font-size: 0.75rem;">
+                      <span class="alert-icon">⚠️</span>
+                      <span>These visualizations highlight regions of model focus and are NOT actual photographs.</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                      <div>
+                        <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; text-align: center; margin-bottom: 0.3rem;">Original Image</div>
+                        <img id="vizOriginal" src="" alt="Original ultrasound" style="width:100%; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" />
+                      </div>
+                      <div>
+                        <div style="font-size: 0.65rem; color: #ff5252; text-transform: uppercase; text-align: center; margin-bottom: 0.3rem;">Model Attention Map</div>
+                        <img id="vizGradcam" src="" alt="Grad-CAM heatmap" style="width:100%; border-radius:6px; border:1px solid rgba(255,82,82,0.4);" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- PDF Downloads -->
-            <div class="divider"></div>
-            <div class="section-label mb-2"><i class="fas fa-file-pdf"></i> Download Reports</div>
-            <div class="pdf-grid">
-              <div class="pdf-card">
-                <div class="pdf-icon">🩺</div>
-                <div class="pdf-title">Medical Report</div>
-                <div class="pdf-desc">Technical clinical report for healthcare professionals</div>
-                <button type="button" class="btn btn-primary btn-full" id="dlDoctorBtn" onclick="downloadPDF('doctor')" disabled>
-                  <i class="fas fa-download"></i> Download Doctor's Report
-                </button>
-              </div>
-              <div class="pdf-card">
-                <div class="pdf-icon">👨‍👩‍👧</div>
-                <div class="pdf-title">Patient Report</div>
-                <div class="pdf-desc">Easy-to-understand summary with nutrition guide</div>
-                <button type="button" class="btn btn-success btn-full" id="dlPatientBtn" onclick="downloadPDF('patient')" disabled>
-                  <i class="fas fa-download"></i> Download Patient Report
-                </button>
-              </div>
-            </div>
+                <!-- Analysis Findings Tabs -->
+                <div class="findings-card">
+                  <div style="font-size: 0.85rem; color: var(--cyan-400); font-weight: 600; text-transform: uppercase; margin-bottom: 1rem;"><i class="fas fa-file-alt"></i> Analysis Findings</div>
+                  
+                  <div class="report-tabs" id="reportTabs" style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 1rem; border: none;">
+                    <button class="report-tab active" onclick="switchTab('findings')" style="border-radius: 4px; padding: 0.5rem 0.8rem;">🔍 Findings</button>
+                    <button class="report-tab" onclick="switchTab('analysis')" style="border-radius: 4px; padding: 0.5rem 0.8rem;">👶 Condition</button>
+                    <button class="report-tab" onclick="switchTab('risk')" style="border-radius: 4px; padding: 0.5rem 0.8rem;">⚠️ Risk</button>
+                    <button class="report-tab" onclick="switchTab('recommendations')" style="border-radius: 4px; padding: 0.5rem 0.8rem;">📋 Recommendations</button>
+                    <button class="report-tab" onclick="switchTab('nutrients')" style="border-radius: 4px; padding: 0.5rem 0.8rem;">🥗 Nutrients</button>
+                    <button class="report-tab" onclick="switchTab('full')" style="border-radius: 4px; padding: 0.5rem 0.8rem;">📄 Full Report</button>
+                  </div>
 
-            <!-- Reset -->
-            <div class="divider"></div>
-            <div class="text-center">
-              <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                <i class="fas fa-redo"></i> Analyze Another Image
-              </button>
-            </div>
+                  <div class="tab-panel active" id="tab-findings">
+                    <div class="report-block-content" id="tabFindings" style="background: rgba(0,0,0,0.15); padding: 1rem; border-radius: 8px;">—</div>
+                  </div>
+                  <div class="tab-panel" id="tab-analysis">
+                    <div class="report-block-content" id="tabAnalysis" style="background: rgba(0,0,0,0.15); padding: 1rem; border-radius: 8px;">—</div>
+                  </div>
+                  <div class="tab-panel" id="tab-risk">
+                    <div class="report-block-content" id="tabRisk" style="background: rgba(0,0,0,0.15); padding: 1rem; border-radius: 8px;">—</div>
+                  </div>
+                  <div class="tab-panel" id="tab-recommendations">
+                    <div class="report-block-content" id="tabRecommendations" style="background: rgba(0,0,0,0.15); padding: 1rem; border-radius: 8px;">—</div>
+                  </div>
+                  <div class="tab-panel" id="tab-nutrients">
+                    <div class="report-block-content mb-2" id="nutrientDesc" style="margin-bottom: 1rem; padding: 1rem; background: rgba(27,94,32,0.1); border-radius: 8px; border: 1px solid rgba(76,175,147,0.2);"></div>
+                    <div class="nutrients-grid" id="nutrientCards"></div>
+                    <div class="divider"></div>
+                    <div class="report-block-content" id="tabNutrientsRaw" style="font-size:0.78rem; color: var(--text-muted);"></div>
+                  </div>
+                  <div class="tab-panel" id="tab-full">
+                    <div class="report-block-content" id="tabFullReport" style="background: #000; padding: 1rem; border-radius: 8px; font-size: 0.78rem; font-family: monospace; color: #a5d6a7; overflow-x: auto;"></div>
+                  </div>
+
+                </div>
+
+              </div> <!-- /Right Col -->
+              
+            </div> <!-- /Dashboard Grid -->
           </div>
 
         </main>
@@ -1438,6 +2174,18 @@
     <!-- ══════════════════════════════════════════════════════════
          SCRIPTS
     ══════════════════════════════════════════════════════════ -->
+    <!-- ════════════════════ TRUST & SAFETY FOOTER ════════════════════ -->
+    <footer class="trust-footer">
+      <div class="container">
+        <div class="disclaimer-alert">
+          <i class="fas fa-shield-alt"></i>
+          <div>
+            <strong>Medical Disclaimer:</strong> This system is intended for research and decision-support purposes. AI-generated analysis does not replace professional medical evaluation or diagnosis.
+          </div>
+        </div>
+      </div>
+    </footer>
+
     <script>
     // ────────────────────────────────────────────────────────────
     // BACKGROUND CANVAS — Floating Particles

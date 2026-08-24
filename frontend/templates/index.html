@@ -2532,7 +2532,7 @@
         const stepTimer = setTimeout(() => setProgress(2), 1500);
         const stepTimer2 = setTimeout(() => setProgress(3), 3000);
 
-        const res = await fetch('http://127.0.0.1:5000/api/diagnose', {
+        const res = await fetch('/api/diagnose', {
           method: 'POST',
           body: formData
         });
@@ -2633,8 +2633,8 @@
       const enhancedPath = d.visualizations.enhanced_image_path;
       const resultEnhSection = document.getElementById('enhancedImageSection');
       if (enhancedPath) {
-        document.getElementById('resultOriginalImg').src = 'http://127.0.0.1:5000/' + d.image_path;
-        document.getElementById('resultEnhancedImg').src = 'http://127.0.0.1:5000/' + enhancedPath;
+        document.getElementById('resultOriginalImg').src = '/' + d.image_path;
+        document.getElementById('resultEnhancedImg').src = '/' + enhancedPath;
         resultEnhSection.classList.remove('hidden');
       } else {
         resultEnhSection.classList.add('hidden');
@@ -2643,8 +2643,8 @@
       // Grad-CAM Visualizations
       if (d.visualizations.available) {
         document.getElementById('vizSection').classList.remove('hidden');
-        document.getElementById('vizOriginal').src = 'http://127.0.0.1:5000/' + d.image_path;
-        document.getElementById('vizGradcam').src = 'http://127.0.0.1:5000/' + d.visualizations.gradcam_path;
+        document.getElementById('vizOriginal').src = '/' + d.image_path;
+        document.getElementById('vizGradcam').src = '/' + d.visualizations.gradcam_path;
       }
 
       // PDF buttons

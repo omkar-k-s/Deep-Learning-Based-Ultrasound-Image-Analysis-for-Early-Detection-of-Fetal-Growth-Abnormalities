@@ -9,7 +9,7 @@ huggingface-hub
 transformers
 faiss-cpu
 scikit-image
-opencv-python
+opencv-python-headless
 matplotlib
 requests
 python-dotenv
@@ -18,3 +18,5 @@ pypdf
 pydicom
 
 Flask-CORS
+fastapi
+uvicorn

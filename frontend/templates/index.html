@@ -1286,7 +1286,7 @@
         font-weight: 800;
         line-height: 1.15;
         margin-bottom: 1.5rem;
-        background: linear-gradient(90deg, #fff, var(--cyan-400), var(--blue-400));
+        background: linear-gradient(90deg, var(--text-primary), var(--cyan-400), var(--blue-400));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
@@ -1591,6 +1591,48 @@
       .disclaimer-alert i {
         font-size: 1.5rem;
       }
+
+      /* ================================================================
+         LIGHT THEME VARIABLES & TOGGLE
+      ================================================================ */
+      body.light-theme {
+        --navy-900: #f0f4f8;
+        --navy-800: #e1e8f0;
+        --navy-700: #cbd5e1;
+        --navy-600: #94a3b8;
+        --text-primary: #0f172a;
+        --text-secondary: #334155;
+        --text-muted: #64748b;
+        --glass-bg: rgba(255, 255, 255, 0.7);
+        --glass-bg-hover: rgba(255, 255, 255, 0.9);
+        --glass-border: rgba(0, 0, 0, 0.1);
+        --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        --teal-500: #0077b6;
+        --cyan-400: #0096c7;
+      }
+      
+      .theme-toggle-btn {
+        background: transparent;
+        border: 1px solid var(--glass-border);
+        color: var(--text-primary);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 1rem;
+        margin-left: 1rem;
+      }
+      
+      .theme-toggle-btn:hover {
+        background: var(--glass-bg-hover);
+        border-color: var(--teal-500);
+        color: var(--teal-500);
+        transform: translateY(-2px);
+      }
     </style>
   </head>
 
@@ -1620,6 +1662,9 @@
             <a href="#how-it-works" class="nav-link">How It Works</a>
             <a href="#analysis-tool" class="nav-link">Analysis Tool</a>
             <a href="#" class="nav-link" onclick="if(!document.getElementById('resultsCard').classList.contains('hidden')){ document.getElementById('resultsCard').scrollIntoView({behavior:'smooth'}); } else { alert('Please upload and analyze an ultrasound image first to view the results dashboard.'); } return false;">Results</a>
+            <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Light/Dark Theme">
+              <i class="fas fa-sun"></i>
+            </button>
             <a href="#analysis-tool" class="nav-btn">Start Analysis</a>
           </div>
         </div>
@@ -1689,11 +1734,11 @@
           <div class="about-hero">
             <div style="text-align: left;">
               <div class="hero-badge" style="margin-bottom: 1rem;">ABOUT THE PROJECT</div>
-              <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif; font-weight: 800; line-height: 1.2; background: linear-gradient(90deg, #fff, var(--cyan-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Advancing Fetal Ultrasound Analysis with Deep Learning</h2>
+              <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif; font-weight: 800; line-height: 1.2; background: linear-gradient(90deg, var(--text-primary), var(--cyan-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Advancing Fetal Ultrasound Analysis with Deep Learning</h2>
               <p class="about-text">This project explores the use of deep learning and medical image analysis to support the early identification of potential fetal growth abnormalities from ultrasound images.</p>
             </div>
             <div class="about-hero-img">
-              <img src="file:///C:/Users/ksomk/.gemini/antigravity-ide/brain/44dd3d2f-0178-4861-81e9-b0ffade944ea/about_hero_visual_1787553258093.jpg" alt="Medical Neural Network Visualization" />
+              <img src="{{ url_for('static', filename='about_hero_visual.jpg') }}" alt="Medical Neural Network Visualization" />
             </div>
           </div>
 
@@ -1804,7 +1849,7 @@
           <!-- Responsible Use -->
           <div class="about-card" style="background: rgba(255, 193, 7, 0.05); border-color: rgba(255, 193, 7, 0.2);">
             <h3 class="about-card-title" style="color: #ffc107;"><i class="fas fa-shield-alt"></i> Responsible Use</h3>
-            <p class="about-text" style="color: rgba(255,255,255,0.85);">
+            <p class="about-text">
               This project is intended as a research and decision-support prototype. AI-generated analysis should not be considered a medical diagnosis and should not replace evaluation by qualified healthcare professionals.
             </p>
           </div>
@@ -2010,7 +2055,7 @@
           <div class="glass-card results-section hidden" id="resultsCard" style="padding: 0; background: transparent; border: none; box-shadow: none;">
             
             <div style="text-align: center; margin-bottom: 2rem;">
-              <h2 style="font-family: 'Poppins', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; background: linear-gradient(90deg, #fff, var(--cyan-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Analysis Results</h2>
+              <h2 style="font-family: 'Poppins', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; background: linear-gradient(90deg, var(--text-primary), var(--cyan-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Analysis Results</h2>
               <p style="color: var(--text-secondary);">Review the AI-assisted analysis generated from the uploaded ultrasound image.</p>
             </div>
 
@@ -2281,7 +2326,8 @@
       const dot = document.getElementById('systemStatusDot');
       const txt = document.getElementById('systemStatusText');
       try {
-        const res = await fetch('/api/health');
+        const baseUrl = window.location.port === '3000' ? `http://${window.location.hostname}:5000` : '';
+        const res = await fetch(`${baseUrl}/api/health`);
         const data = await res.json();
         if (data.status === 'healthy') {
           dot.classList.remove('offline');
@@ -2532,7 +2578,8 @@
         const stepTimer = setTimeout(() => setProgress(2), 1500);
         const stepTimer2 = setTimeout(() => setProgress(3), 3000);
 
-        const res = await fetch('/api/diagnose', {
+        const baseUrl = window.location.port === '3000' ? `http://${window.location.hostname}:5000` : '';
+        const res = await fetch(`${baseUrl}/api/diagnose`, {
           method: 'POST',
           body: formData
         });
@@ -2632,9 +2679,10 @@
       // Enhanced image — show at top of results (server-enhanced version)
       const enhancedPath = d.visualizations.enhanced_image_path;
       const resultEnhSection = document.getElementById('enhancedImageSection');
+      const getBaseUrl = () => window.location.port === '3000' ? `http://${window.location.hostname}:5000` : '';
       if (enhancedPath) {
-        document.getElementById('resultOriginalImg').src = '/' + d.image_path;
-        document.getElementById('resultEnhancedImg').src = '/' + enhancedPath;
+        document.getElementById('resultOriginalImg').src = getBaseUrl() + d.image_path;
+        document.getElementById('resultEnhancedImg').src = getBaseUrl() + enhancedPath;
         resultEnhSection.classList.remove('hidden');
       } else {
         resultEnhSection.classList.add('hidden');
@@ -2643,8 +2691,8 @@
       // Grad-CAM Visualizations
       if (d.visualizations.available) {
         document.getElementById('vizSection').classList.remove('hidden');
-        document.getElementById('vizOriginal').src = '/' + d.image_path;
-        document.getElementById('vizGradcam').src = '/' + d.visualizations.gradcam_path;
+        document.getElementById('vizOriginal').src = getBaseUrl() + d.image_path;
+        document.getElementById('vizGradcam').src = getBaseUrl() + d.visualizations.gradcam_path;
       }
 
       // PDF buttons
@@ -2734,9 +2782,13 @@
     // ────────────────────────────────────────────────────────────
     function downloadPDF(type) {
       if (!diagnosisResult) return;
+      const getBaseUrl = () => window.location.port === '3000' ? `http://${window.location.hostname}:5000` : '';
+      let docReport = diagnosisResult.diagnosis.pdf_reports.doctor_report;
+      let patReport = diagnosisResult.diagnosis.pdf_reports.patient_report;
+      
       const path = type === 'doctor'
-        ? 'http://127.0.0.1:5000/' + diagnosisResult.diagnosis.pdf_reports.doctor_report
-        : 'http://127.0.0.1:5000/' + diagnosisResult.diagnosis.pdf_reports.patient_report;
+        ? getBaseUrl() + (docReport.startsWith('/') ? '' : '/') + docReport
+        : getBaseUrl() + (patReport.startsWith('/') ? '' : '/') + patReport;
 
       if (!path) {
         alert(`${type === 'doctor' ? 'Medical' : 'Patient'} report is not available yet.`);
@@ -2772,6 +2824,21 @@
       hideUploadError();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // Theme Toggle Logic
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = themeToggleBtn.querySelector('i');
+    
+    themeToggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      if (document.body.classList.contains('light-theme')) {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      } else {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      }
+    });
     </script>
   </body>
 </html>

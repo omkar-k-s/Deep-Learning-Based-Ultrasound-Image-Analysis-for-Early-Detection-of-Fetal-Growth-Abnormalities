@@ -20,3 +20,7 @@ pydicom
 Flask-CORS
 fastapi
 uvicorn
+
+# MongoDB
+pymongo
+dnspython

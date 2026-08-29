@@ -36,6 +36,8 @@ from model.gradcam import GradCAM, ClinicalVisualization
 from rag.retriever import MedicalKnowledgeRetriever
 from llm.report_generator import RadiologyReportGenerator
 from llm.pdf_report_generator import PDFReportGenerator
+from db import db
+
 
 from flask_cors import CORS
 
@@ -595,6 +597,10 @@ def diagnose():
             }
         }
 
+        # ── SAVE TO DATABASE ──────────────────────────────────────────────────
+        print("  [DB] Saving diagnosis record to database...")
+        db.save_diagnosis(response['diagnosis'])
+
         print("  [OK] Diagnosis complete\n")
         return jsonify(response)
 
@@ -605,6 +611,21 @@ def diagnose():
             'error': f'Diagnosis processing failed: {str(e)}',
             'traceback': traceback.format_exc()
         }), 500
+
+
+@app.route('/api/history', methods=['GET'])
+def get_history():
+    """Fetch recent diagnostic records from the database."""
+    try:
+        limit = int(request.args.get('limit', 10))
+        records = db.get_recent_diagnoses(limit=limit)
+        return jsonify({
+            'status': 'success',
+            'count': len(records),
+            'records': records
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/api/batch-diagnose', methods=['POST'])

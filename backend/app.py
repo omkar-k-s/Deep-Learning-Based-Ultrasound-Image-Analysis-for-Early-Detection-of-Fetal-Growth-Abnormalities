@@ -27,6 +27,7 @@ load_dotenv()
 import json
 import traceback
 import tempfile
+import zipfile
 from datetime import datetime
 from pathlib import Path
 
@@ -664,6 +665,116 @@ def batch_diagnose():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/evaluate-model', methods=['POST'])
+def evaluate_model():
+    """Evaluate the loaded classifier against a labelled dataset ZIP."""
+    try:
+        from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+        dataset_file = request.files.get('dataset')
+        if dataset_file is None or not dataset_file.filename:
+            return jsonify({'error': 'Upload a labelled dataset ZIP as the "dataset" field.'}), 400
+
+        if not dataset_file.filename.lower().endswith('.zip'):
+            return jsonify({'error': 'The dataset must be a ZIP file.'}), 400
+
+        expected_classes = {
+            'normal': 'Normal Fetus',
+            'fgr': 'Fetal Growth Restriction (FGR)',
+            'abnormal': 'Other Fetal Abnormalities'
+        }
+        allowed_image_extensions = {'.png', '.jpg', '.jpeg', '.dcm'}
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            archive_path = Path(temp_dir) / 'dataset.zip'
+            dataset_file.save(archive_path)
+            extraction_dir = Path(temp_dir) / 'dataset'
+            extraction_dir.mkdir()
+
+            with zipfile.ZipFile(archive_path) as archive:
+                for member in archive.infolist():
+                    member_path = (extraction_dir / member.filename).resolve()
+                    if not str(member_path).startswith(str(extraction_dir.resolve()) + os.sep):
+                        return jsonify({'error': 'Dataset ZIP contains an unsafe path.'}), 400
+                archive.extractall(extraction_dir)
+
+            dataset_root = extraction_dir
+            directories = [path for path in extraction_dir.iterdir() if path.is_dir()]
+            if len(directories) == 1 and (directories[0] / 'normal').is_dir():
+                dataset_root = directories[0]
+
+            true_labels = []
+            predicted_labels = []
+            evaluated_files = []
+            missing_classes = []
+
+            for class_name, class_label in expected_classes.items():
+                class_dir = dataset_root / class_name
+                if not class_dir.is_dir():
+                    missing_classes.append(class_name)
+                    continue
+
+                for image_path in class_dir.rglob('*'):
+                    if not image_path.is_file() or image_path.suffix.lower() not in allowed_image_extensions:
+                        continue
+
+                    processing_path = handle_dicom_file(str(image_path))
+                    result = inference_pipeline.run_inference(processing_path)
+                    if result['status'] != 'success':
+                        continue
+
+                    predicted_label = result['cnn_prediction']['class_label']
+                    true_labels.append(class_label)
+                    predicted_labels.append(predicted_label)
+                    evaluated_files.append(str(image_path.relative_to(extraction_dir)))
+
+            if missing_classes:
+                return jsonify({
+                    'error': 'Dataset is missing required class folders.',
+                    'missing_classes': missing_classes,
+                    'required_structure': ['normal', 'fgr', 'abnormal']
+                }), 400
+
+            if not true_labels:
+                return jsonify({'error': 'No supported images were found in the dataset.'}), 400
+
+            label_order = list(expected_classes.values())
+            matrix = confusion_matrix(
+                true_labels,
+                predicted_labels,
+                labels=label_order
+            ).tolist()
+            report = classification_report(
+                true_labels,
+                predicted_labels,
+                labels=label_order,
+                output_dict=True,
+                zero_division=0
+            )
+
+            return jsonify({
+                'status': 'success',
+                'warning': (
+                    'These metrics are not clinically meaningful until a fetal-ultrasound '
+                    'checkpoint is loaded. The current repository has no trained checkpoint.'
+                ),
+                'evaluated_images': len(true_labels),
+                'accuracy': accuracy_score(true_labels, predicted_labels),
+                'classification_report': report,
+                'confusion_matrix': {
+                    'labels': label_order,
+                    'values': matrix
+                },
+                'evaluated_files': evaluated_files
+            })
+
+    except zipfile.BadZipFile:
+        return jsonify({'error': 'The uploaded dataset is not a valid ZIP file.'}), 400
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({'error': f'Model evaluation failed: {str(e)}'}), 500
 
 
 @app.route('/api/model-info', methods=['GET'])

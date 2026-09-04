@@ -16,6 +16,7 @@ python-dotenv
 reportlab
 pypdf
 pydicom
+kagglehub
 
 Flask-CORS
 fastapi

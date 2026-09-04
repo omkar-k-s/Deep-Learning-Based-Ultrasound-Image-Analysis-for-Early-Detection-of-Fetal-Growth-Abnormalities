@@ -44,9 +44,27 @@ class FetalUltrasoundCNN:
         }
         
         self.condition_descriptions = {
-            0: "The fetus appears to be developing normally with appropriate growth parameters.",
-            1: "Signs of restricted fetal growth detected. Abdominal circumference and/or femur length below expected percentile.",
-            2: "Abnormal anatomical features detected. Requires immediate clinical evaluation."
+            0: (
+                "The fetus appears to be developing normally with appropriate growth parameters. "
+                "All key measurements — head circumference, abdominal circumference, and femur length — "
+                "are within the healthy range for this stage of pregnancy. The placenta is functioning "
+                "well, delivering adequate nutrients and oxygen to support the baby's growth."
+            ),
+            1: (
+                "Signs of restricted fetal growth (FGR) detected. The baby's abdominal circumference "
+                "is smaller than expected for this stage of pregnancy, suggesting the baby is not receiving "
+                "enough nutrients through the placenta. The baby's head circumference may be relatively "
+                "preserved (brain-sparing effect) — a natural protective response where blood flow is "
+                "prioritised to the brain over the body. This is a warning sign of placental insufficiency "
+                "and requires close monitoring."
+            ),
+            2: (
+                "Unusual anatomical features were detected in this ultrasound image. One or more "
+                "measurements or structural features appear outside the normal range in a pattern that "
+                "does not match typical growth restriction. This may indicate a structural abnormality, "
+                "chromosomal difference, or other condition. Immediate specialist evaluation is required "
+                "to determine the exact nature and clinical significance of these findings."
+            )
         }
         
         # Load pretrained model

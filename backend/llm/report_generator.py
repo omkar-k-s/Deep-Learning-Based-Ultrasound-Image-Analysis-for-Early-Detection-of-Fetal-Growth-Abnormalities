@@ -366,66 +366,143 @@ ANALYSIS PIPELINE: CNN → RAG (FAISS) → Template-based Report Generator
         }
 
     def _build_findings(self, cnn_result, rag_context):
-        """Build findings section."""
+        """Build findings section with plain-language measurement explanations."""
         confidence = cnn_result.get('confidence_percentage', 0)
 
         if 'Normal' in cnn_result.get('class_label', ''):
             findings_text = """
-BIOMETRIC MEASUREMENTS:
-  ✓ Head Circumference (HC): Within normal limits for gestational age
-  ✓ Femur Length (FL): Appropriate, normal proportions
-  ✓ Abdominal Circumference (AC): Normal, no growth discordance
-  ✓ Estimated Fetal Weight (EFW): 50th percentile
+BIOMETRIC MEASUREMENTS — ALL NORMAL:
 
-AMNIOTIC FLUID ASSESSMENT:
-  ✓ Volume: Normal (AFI 8-18 cm or 5-8 quadrant pockets)
-  ✓ Distribution: Even distribution throughout uterine cavity
-  ✓ No polyhydramnios or oligohydramnios
+  ✅ Head Circumference (HC): Within normal limits for gestational age
+     → WHAT THIS MEANS: The baby's head size is healthy and growing at the
+       expected rate. Brain development appears to be on track.
 
-DOPPLER ULTRASOUND FINDINGS:
-  ✓ Umbilical Artery (UA): Normal flow pattern, S/D ratio <3.0
-  ✓ Middle Cerebral Artery (MCA): Normal PI, no brain-sparing
-  ✓ Cerebroplacental Ratio (CPR): Normal (>1.08)
-  ✓ Ductus Venosus: Normal waveform, forward diastolic flow
-  ✓ All Doppler indices consistent with good placental function
+  ✅ Abdominal Circumference (AC): Normal — no growth discordance
+     → WHAT THIS MEANS: The baby's belly is the right size for this stage
+       of pregnancy. The liver and abdominal organs are receiving adequate
+       nutrients from the placenta.
 
-INTERPRETATION: All parameters support normal fetal development.
+  ✅ Femur Length (FL): Appropriate — normal body proportions
+     → WHAT THIS MEANS: The baby's leg bones are the expected length,
+       indicating normal skeletal growth and overall body proportions.
+
+  ✅ Estimated Fetal Weight (EFW): ~50th percentile (healthy range)
+     → WHAT THIS MEANS: The baby's estimated weight is right in the middle
+       of the normal range — not too small, not too large.
+
+AMNIOTIC FLUID ASSESSMENT — NORMAL:
+  ✅ Volume: Normal (AFI 8–18 cm range)
+     → WHAT THIS MEANS: The amount of fluid surrounding the baby is healthy.
+       Amniotic fluid reflects normal kidney function and good overall
+       fetal well-being.
+  ✅ No polyhydramnios (too much fluid) or oligohydramnios (too little fluid)
+
+DOPPLER ULTRASOUND FINDINGS — NORMAL:
+  ✅ Umbilical Artery (UA): Normal blood flow pattern (S/D ratio < 3.0)
+     → WHAT THIS MEANS: Blood is flowing normally through the umbilical cord
+       from the placenta to the baby — nutrients and oxygen delivery is good.
+  ✅ Middle Cerebral Artery (MCA): Normal — no brain-sparing signal
+     → WHAT THIS MEANS: The brain is NOT diverting blood away from the body,
+       which is a healthy sign — all organs are receiving adequate supply.
+  ✅ Cerebroplacental Ratio (CPR): Normal (> 1.08)
+     → WHAT THIS MEANS: The balance between brain and placental blood flow
+       is healthy. No signs of the baby compensating for low oxygen.
+
+SUMMARY: All parameters indicate the baby is growing normally and the
+placenta is functioning well. No cause for concern at this time.
             """
 
         elif 'Growth' in cnn_result.get('class_label', ''):
             findings_text = f"""
-BIOMETRIC MEASUREMENTS - ABNORMAL:
-  ⚠ Head Circumference (HC): Preserved at expected centile
-  ⚠ Femur Length (FL): Maintained, relatively normal
-  ⚠ Abdominal Circumference (AC): REDUCED - Below 10th percentile *** 
-  ⚠ Estimated Fetal Weight (EFW): <10th percentile for gestational age
-  ⚠ HC/AC Ratio: ELEVATED (>1.3) - Asymmetric growth pattern
+BIOMETRIC MEASUREMENTS — ABNORMAL PATTERN DETECTED:
 
-AMNIOTIC FLUID ASSESSMENT - ABNORMAL:
-  ⚠ Volume: DECREASED (oligohydramnios present)
-  ⚠ Deepest Vertical Pocket: <2 cm
-  ⚠ Clinical Significance: Marker of placental insufficiency
+  ⚠️  Head Circumference (HC): RELATIVELY PRESERVED (near expected range)
+     → WHAT THIS MEANS: The baby's head and brain size is being protected.
+       When the placenta cannot deliver enough nutrients, the baby's body
+       instinctively diverts blood flow to the brain first (brain-sparing
+       effect). This is a natural defence — but it also means the rest of
+       the body is being deprived.
 
-DOPPLER ULTRASOUND FINDINGS - ABNORMAL:
-  ⚠ Umbilical Artery (UA): ELEVATED PI and S/D ratio (>3.5)
-  ⚠ Diastolic Notching: Present, indicates increased resistance
-  ⚠ Middle Cerebral Artery (MCA): DECREASED PI - Brain-sparing effect *** 
-  ⚠ Cerebroplacental Ratio (CPR): ABNORMAL (<1.0) ***
-  ⚠ Ductus Venosus: Abnormal waveform with reversed flow
-  ⚠ All findings consistent with PLACENTAL INSUFFICIENCY
+  🔴 Abdominal Circumference (AC): TOO SMALL — Below 10th percentile
+     → WHAT THIS MEANS: The baby's belly is significantly SMALLER than it
+       should be for this stage of pregnancy. The abdominal circumference
+       reflects liver size and fat stores — when the placenta is not
+       delivering enough nutrients, these are the first areas to suffer.
+       This is the MOST SENSITIVE early indicator of growth restriction.
 
-AI MODEL CONFIDENCE: {confidence:.1f}% 
-INTERPRETATION: Findings are consistent with FETAL GROWTH RESTRICTION 
-due to placental dysfunction.
+  ⚠️  Femur Length (FL): Maintained but may be borderline
+     → WHAT THIS MEANS: The leg bone length is relatively preserved, which
+       is typical in asymmetric (late-onset) growth restriction — where the
+       belly grows slowly but the skeleton is partially spared.
+
+  🔴 Estimated Fetal Weight (EFW): BELOW 10th percentile for gestational age
+     → WHAT THIS MEANS: The baby weighs less than 90% of babies at the same
+       stage of pregnancy. This confirms significant growth restriction and
+       the baby is not gaining weight at the expected rate.
+
+  🔴 HC/AC Ratio: ELEVATED (> 1.3) — Asymmetric growth pattern
+     → WHAT THIS MEANS: The head is proportionally larger than the belly.
+       This asymmetric pattern is the hallmark of placental insufficiency —
+       the body is protecting the brain at the expense of abdominal growth.
+
+AMNIOTIC FLUID ASSESSMENT — ABNORMAL:
+  🔴 Volume: DECREASED (oligohydramnios — too little fluid)
+     → WHAT THIS MEANS: There is less fluid than normal around the baby.
+       Low amniotic fluid occurs when the baby's kidneys reduce urine output
+       to conserve water — a stress response to poor placental blood flow.
+       This is a serious sign of fetal compromise.
+  🔴 Deepest Vertical Pocket: < 2 cm (critically low)
+
+DOPPLER ULTRASOUND FINDINGS — ABNORMAL:
+  🔴 Umbilical Artery (UA): ELEVATED resistance (PI and S/D ratio > 3.5)
+     → WHAT THIS MEANS: Blood is having difficulty flowing through the
+       placenta to reach the baby. High resistance means the placenta is
+       not working properly — like trying to push blood through a blocked
+       pipe. The baby is not getting enough oxygen and nutrients.
+
+  🔴 Middle Cerebral Artery (MCA): DECREASED resistance — Brain-sparing detected
+     → WHAT THIS MEANS: The baby's brain blood vessels have widened to
+       accept more blood flow (vasodilation). This brain-sparing is the
+       body's emergency response to low oxygen — but it confirms the baby
+       is under stress.
+
+  🔴 Cerebroplacental Ratio (CPR): ABNORMAL (< 1.0)
+     → WHAT THIS MEANS: The ratio of brain blood flow to placental blood
+       flow is inverted. The brain is receiving preferential flow at the
+       expense of the body — a confirmed sign of fetal compromise and
+       placental insufficiency.
+
+  🔴 Ductus Venosus: Abnormal waveform — reversed or absent diastolic flow
+     → WHAT THIS MEANS: Blood flow patterns in the liver vessels are
+       abnormal. This is an URGENT late-stage sign indicating the baby's
+       heart is under significant strain.
+
+AI MODEL CONFIDENCE: {confidence:.1f}%
+INTERPRETATION: The combination of small abdominal circumference, preserved
+head circumference, low amniotic fluid, and abnormal Doppler patterns all
+point to FETAL GROWTH RESTRICTION caused by PLACENTAL INSUFFICIENCY —
+the placenta is failing to deliver adequate nutrition and oxygen to the baby.
             """
 
         else:
             findings_text = """
-ABNORMAL FINDINGS DETECTED:
-  ⚠ Detailed anatomical structures require careful specialist evaluation
-  ⚠ Notable anomaly pattern identified on AI assessment
-  
-RECOMMENDATION: Urgent consultation with maternal-fetal medicine specialist
+ABNORMAL FINDINGS DETECTED — SPECIALIST EVALUATION REQUIRED:
+
+  ⚠️  Structural or biometric abnormality pattern identified
+     → WHAT THIS MEANS: One or more measurements or anatomical features
+       appear outside the normal range in an unusual pattern. This may
+       indicate a structural difference in the baby's anatomy, a chromosomal
+       variation, or another type of condition that requires expert review.
+
+  ⚠️  This pattern does NOT match typical growth restriction (FGR)
+     → It may involve features such as:
+       • Unusual organ development or positioning
+       • Abnormal brain or skull measurements
+       • Limb length discrepancies
+       • Fluid accumulation in unexpected areas
+
+RECOMMENDATION: Urgent consultation with a maternal-fetal medicine (MFM)
+specialist is required. Additional imaging and genetic screening may be needed.
             """
 
         return {
@@ -433,50 +510,73 @@ RECOMMENDATION: Urgent consultation with maternal-fetal medicine specialist
             'content': findings_text
         }
 
+
     def _build_condition_analysis(self, cnn_result, rag_context):
-        """Build fetal condition analysis section."""
+        """Build fetal condition analysis section with plain-language explanations."""
         class_label = cnn_result.get('class_label', '')
 
         if 'Normal' in class_label:
             analysis = """
-FETAL CONDITION: NORMAL DEVELOPMENT
+FETAL CONDITION: NORMAL DEVELOPMENT ✅
 
-The fetus demonstrates normal growth and development patterns consistent with 
-stated gestational age. All biometric parameters fall within the expected range.
+WHAT IS HAPPENING:
+The baby is growing at the expected rate for this stage of pregnancy. The placenta
+is working properly — delivering the right amount of oxygen and nutrients through
+the umbilical cord. All the key measurements (head, belly, leg bones) are in the
+healthy range and the fluid around the baby is normal.
 
-Key Assessment Points:
-• Growth velocity: NORMAL
-• Doppler patterns: REASSURING
-• Amniotic fluid: ADEQUATE
-• Placental function: ADEQUATE
-• No evidence of compromise
+Think of it like a healthy garden: the placenta is the water supply, the baby is
+the plant, and all the measurements tell us the plant is growing at exactly the
+right pace — not too fast, not too slow.
+
+DETAILED ASSESSMENT:
+• Growth velocity: NORMAL — the baby is gaining weight at the expected rate
+• Doppler blood flow: REASSURING — no blockages or resistance in blood supply
+• Amniotic fluid: ADEQUATE — baby's kidneys are working normally
+• Placental function: WORKING WELL — nutrients and oxygen delivery is good
+• Brain development: ON TRACK — no signs of stress or compensation
+• No evidence of fetal compromise or growth restriction
             """
 
         elif 'Growth Restriction' in class_label:
             related_conditions = rag_context.get('retrieved_conditions', {})
             fetal_conditions = related_conditions.get('related_fetal_conditions', [])
 
-            condition_details = ""
+            imaging_detail = ""
             if fetal_conditions and len(fetal_conditions) > 0:
                 first_condition = fetal_conditions[0]
-                condition_details = f"""
-Specific Pathophysiology:
-{first_condition.get('imaging_features', 'Reduced growth velocity detected')}
-                """
+                imaging_detail = first_condition.get('imaging_features', '')
 
             analysis = f"""
-FETAL CONDITION: GROWTH RESTRICTION DETECTED
+FETAL CONDITION: FETAL GROWTH RESTRICTION (FGR) DETECTED ⚠️
 
-The fetus demonstrates growth parameters below the expected range for gestational age.
-This pattern is consistent with Fetal Growth Restriction (FGR).
+WHAT IS HAPPENING:
+The baby is not growing as fast as expected. The root cause is the PLACENTA —
+it is not delivering enough nutrients and oxygen to the baby. Think of the
+placenta as the baby's food and oxygen supply line. When this supply line is
+restricted (due to high blood pressure, preeclampsia, or other conditions),
+the baby receives less nutrition.
 
-{condition_details}
+The baby's body responds by making a critical choice: protect the brain first.
+This is called "brain-sparing" — blood flow is redirected to the brain and
+heart, while the belly, fat stores, and limbs receive less. This is why:
 
-Severity Assessment:
-• Growth deficit: Estimated weight below 10th percentile
-• Placental perfusion: Compromised (abnormal Doppler indices)
-• Brain-sparing compensation: PRESENT (elevated cerebroplacental ratio)
-• Amniotic fluid status: May be reduced in severe cases
+  • The baby's HEAD is relatively normal in size (brain is being protected) ✅
+  • The baby's BELLY is SMALLER than normal (nutrients diverted away) 🔴
+  • The baby weighs LESS than expected for this stage 🔴
+  • The fluid around the baby is LOW (kidneys are conserving water) 🔴
+
+This is the body's natural survival strategy, but it means the baby is under
+stress and needs close medical attention and monitoring.
+
+CLINICAL DETAILS:
+{imaging_detail if imaging_detail else "Reduced growth velocity with asymmetric biometry pattern detected."}
+
+SEVERITY INDICATORS:
+• Growth deficit: Estimated weight below 10th percentile for gestational age
+• Placental perfusion: COMPROMISED — abnormal blood flow resistance
+• Brain-sparing: ACTIVE — baby is compensating for low nutrient delivery
+• Amniotic fluid: REDUCED — a marker of placental compromise severity
             """
 
         else:
@@ -485,12 +585,25 @@ FETAL CONDITION: ABNORMALITY DETECTED
 
 Detailed evaluation demonstrates structural or functional abnormality requiring
 specialist assessment and potentially additional imaging modalities.
+
+WHAT IS HAPPENING:
+The AI has detected features in this ultrasound that are outside normal ranges
+but do not follow the typical pattern of growth restriction. The baby may have:
+• A structural difference in an organ, limb, or anatomical feature
+• A chromosomal variation affecting development
+• An infection or metabolic condition affecting growth
+• An unusual positioning or placental attachment
+
+This does NOT necessarily mean the outcome will be bad — many detected
+abnormalities can be managed effectively with specialist care. However,
+expert review is essential to determine the exact cause and next steps.
             """
 
         return {
             'section_title': 'FETAL CONDITION ANALYSIS',
             'content': analysis
         }
+
 
     def _build_maternal_analysis(self, rag_context):
         """Build maternal risk factors analysis section."""

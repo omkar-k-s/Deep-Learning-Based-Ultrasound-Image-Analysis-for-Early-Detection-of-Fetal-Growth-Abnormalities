@@ -1,8 +1,8 @@
-# 🏥 Deep-Learning-Based-Ultrasound-Image-Analysis-for-Early-Detection-of-Fetal-Growth-Abnormalities
+#  Deep-Learning-Based-Ultrasound-Image-Analysis-for-Early-Detection-of-Fetal-Growth-Abnormalities
 
 A comprehensive, production-ready AI system for diagnosing fetal growth restriction and other abnormalities from ultrasound images. 
 
-## 📸 Screenshots
+##  Screenshots
 
 *(You can drag and drop your project screenshots here to replace these placeholders!)*
 
@@ -12,7 +12,7 @@ A comprehensive, production-ready AI system for diagnosing fetal growth restrict
 
 ---
 
-## 🚀 Overview
+##  Overview
 
 The system combines state-of-the-art technologies to assist medical professionals:
 
@@ -25,7 +25,7 @@ The system combines state-of-the-art technologies to assist medical professional
 
 ---
 
-## 🛠️ Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8+
@@ -92,7 +92,7 @@ majorproject/
 
 ---
 
-## 🔍 System Architecture
+##  System Architecture
 
 ### 1. CNN Image Analysis
 - Uses transfer learning (ResNet50/MobileNet) to classify images into **Normal Fetus**, **Fetal Growth Restriction (FGR)**, or **Other Abnormalities**.
@@ -111,7 +111,7 @@ majorproject/
 
 ---
 
-## 💻 API Endpoints
+##  API Endpoints
 
 - **`POST /api/diagnose`**: Main diagnosis endpoint. Accepts image upload and patient details.
 - **`GET /api/history`**: Retrieves recent diagnostic records from MongoDB.
@@ -121,7 +121,7 @@ majorproject/
 
 ---
 
-## 🔐 Security & Best Practices
+##  Security & Best Practices
 
 1. **Input Validation**: Robust file type/size checking for ultrasound images. Rejects non-medical photography.
 2. **Privacy**: Images are stored with timestamps.
@@ -129,5 +129,5 @@ majorproject/
 
 ---
 
-## 📄 License
+##  License
 Educational use - modify and distribute freely with attribution.

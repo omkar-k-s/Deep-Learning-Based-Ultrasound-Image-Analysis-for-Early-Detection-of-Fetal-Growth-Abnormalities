@@ -2,8 +2,6 @@
 __pycache__/
 *.pyc
 .env
-backend/Datasets/
-Datasets/
 backend/uploads/
 uploads/
 *.pdf

@@ -587,12 +587,17 @@ Detailed evaluation demonstrates structural or functional abnormality requiring
 specialist assessment and potentially additional imaging modalities.
 
 WHAT IS HAPPENING:
-The AI has detected features in this ultrasound that are outside normal ranges
-but do not follow the typical pattern of growth restriction. The baby may have:
-• A structural difference in an organ, limb, or anatomical feature
-• A chromosomal variation affecting development
-• An infection or metabolic condition affecting growth
-• An unusual positioning or placental attachment
+The AI has detected features in this ultrasound that are outside normal ranges but do not follow the typical "brain-sparing" pattern of Fetal Growth Restriction (FGR). This indicates a different type of growth or developmental concern.
+
+Specifically, the AI focuses on structural measurements. In this case, it may be seeing:
+  • The baby's HEAD SIZE (HC) is measuring unusually large or small, falling outside the expected normal growth percentiles. 🔴
+  • The baby's BELLY SIZE (AC) or body proportions do not match the expected gestational age. 🔴
+  • Other anatomical features or organ structures are presenting atypical shapes or sizes. 🔴
+
+These findings suggest the baby may have:
+• A structural difference affecting skeletal or brain development
+• A chromosomal variation
+• An infection or metabolic condition (like gestational diabetes leading to macrosomia/large belly)
 
 This does NOT necessarily mean the outcome will be bad — many detected
 abnormalities can be managed effectively with specialist care. However,
@@ -659,18 +664,20 @@ CLINICAL ASSESSMENT REQUIRED:
         """Build risk assessment section."""
         confidence = cnn_result.get('confidence_percentage', 0)
 
-        if confidence > 75:
-            risk_level = "HIGH RISK"
-            risk_description = "Significant concern for fetal growth restriction or abnormality"
-            probability = "60-80% probability"
-        elif confidence > 60:
-            risk_level = "MODERATE RISK"
-            risk_description = "Borderline growth concern; close monitoring recommended"
-            probability = "30-50% probability"
-        else:
+        primary_diag = cnn_result.get('primary_diagnosis', '').lower()
+        
+        if 'normal' in primary_diag:
             risk_level = "LOW RISK"
             risk_description = "Normal fetal development pattern"
             probability = "0-20% probability"
+        elif confidence > 65:
+            risk_level = "HIGH RISK"
+            risk_description = "Significant concern for fetal growth restriction or abnormality"
+            probability = "60-80% probability"
+        else:
+            risk_level = "MODERATE RISK"
+            risk_description = "Borderline concern based on low confidence AI prediction; close monitoring recommended"
+            probability = "30-50% probability"
 
         risk_strat = rag_context.get('applicable_risk_stratification', {})
 

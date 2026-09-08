@@ -2645,12 +2645,17 @@
       const conf = pred.confidence_percentage;
       const diag = pred.primary_diagnosis;
 
-      if (conf > 75 && diag !== 'Normal') {
+      const isNormal = diag.toLowerCase().includes('normal');
+      
+      if (isNormal) {
+        riskClass = 'risk-low'; riskText = '✅ LOW RISK';
+        riskRec = 'Continue routine prenatal care. Follow-up in 4-6 weeks.';
+      } else if (conf > 65) {
         riskClass = 'risk-high'; riskText = '🔴 HIGH RISK — URGENT';
         riskRec = 'Immediate specialist consultation. Intensive fetal monitoring required.';
-      } else if (conf > 60 && diag !== 'Normal') {
+      } else {
         riskClass = 'risk-moderate'; riskText = '⚠️ MODERATE RISK';
-        riskRec = 'Close monitoring. Follow-up ultrasound in 1-2 weeks recommended.';
+        riskRec = 'Close monitoring. AI confidence is low, but abnormalities are suspected. Follow-up ultrasound recommended.';
       }
 
       document.getElementById('riskBadgeWrap').innerHTML = `<span class="risk-badge ${riskClass}">${riskText}</span>`;

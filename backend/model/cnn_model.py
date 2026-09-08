@@ -10,6 +10,8 @@ This module handles:
 3. Feature extraction for RAG module
 """
 
+import os
+from pathlib import Path
 import torch
 import torch.nn as nn
 from torchvision import models, transforms
@@ -35,6 +37,9 @@ class FetalUltrasoundCNN:
         self.device = device
         self.num_classes = num_classes
         self.model_name = model_name
+        self.checkpoint_loaded = False
+        self.checkpoint_epoch = None
+        self.checkpoint_val_acc = None
         
         # Class labels for interpretation
         self.class_labels = {
@@ -67,7 +72,7 @@ class FetalUltrasoundCNN:
             )
         }
         
-        # Load pretrained model
+        # Load model & weights
         self.model = self._load_pretrained_model()
         self.model.to(self.device)
         self.model.eval()
@@ -83,21 +88,42 @@ class FetalUltrasoundCNN:
         ])
     
     def _load_pretrained_model(self):
-        """Load pretrained model and modify final layer for 3-class classification."""
+        """Load pretrained model with custom classifier head and restore checkpoint if available."""
         if self.model_name == 'resnet50':
-            model = models.resnet50(pretrained=True)
-            # Replace the final fully connected layer
+            model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
+            # Replace the final fully connected layer with Dropout + Linear matching train.py
             in_features = model.fc.in_features
-            model.fc = nn.Linear(in_features, self.num_classes)
-        
+            model.fc = nn.Sequential(
+                nn.Dropout(p=0.4),
+                nn.Linear(in_features, self.num_classes)
+            )
         elif self.model_name == 'mobilenet_v2':
-            model = models.mobilenet_v2(pretrained=True)
+            model = models.mobilenet_v2(weights=models.MobileNet_V2_Weights.DEFAULT)
             in_features = model.classifier[1].in_features
             model.classifier[1] = nn.Linear(in_features, self.num_classes)
-        
         else:
             raise ValueError(f"Model {self.model_name} not supported")
         
+        # Automatically check and load trained checkpoint if present
+        ckpt_path = Path(__file__).parent / "checkpoint" / "best_model.pth"
+        if ckpt_path.exists():
+            try:
+                print(f"[CNN] Loading trained weights from {ckpt_path}...")
+                ckpt = torch.load(ckpt_path, map_location=self.device, weights_only=False)
+                state_dict = ckpt.get("state_dict", ckpt)
+                model.load_state_dict(state_dict)
+                self.checkpoint_loaded = True
+                self.checkpoint_epoch = ckpt.get("epoch", None)
+                self.checkpoint_val_acc = ckpt.get("val_accuracy", None)
+                val_str = f", Val Acc: {self.checkpoint_val_acc:.2f}%" if self.checkpoint_val_acc is not None else ""
+                print(f"[CNN] Successfully loaded checkpoint (Epoch: {self.checkpoint_epoch}{val_str})")
+            except Exception as e:
+                print(f"[CNN] Warning: Could not load checkpoint weights: {e}")
+                self.checkpoint_loaded = False
+        else:
+            print("[CNN] No custom checkpoint found, running with ImageNet base weights.")
+            self.checkpoint_loaded = False
+
         return model
     
     def predict(self, image_path):
@@ -185,5 +211,8 @@ class FetalUltrasoundCNN:
             'num_classes': self.num_classes,
             'total_parameters': total_params,
             'trainable_parameters': trainable_params,
-            'device': self.device
+            'device': self.device,
+            'checkpoint_loaded': self.checkpoint_loaded,
+            'checkpoint_epoch': self.checkpoint_epoch,
+            'checkpoint_val_acc': round(self.checkpoint_val_acc, 2) if self.checkpoint_val_acc is not None else None
         }

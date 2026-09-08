@@ -10,21 +10,19 @@ Includes patient name/phone, nutrient recommendations, images, and formatting.
 
 import os
 import tempfile
-from reportlab.lib.pagesizes import letter, A4
+from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch, cm
+from reportlab.lib.units import inch
 from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph,
-    Spacer, PageBreak, Image, KeepTogether, HRFlowable
+    Spacer, PageBreak, Image, HRFlowable
 )
-from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT, TA_JUSTIFY
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
 from datetime import datetime
 from pathlib import Path
 import cv2
-import numpy as np
 from PIL import Image as PILImage
-import io
 
 
 class PDFReportGenerator:
@@ -247,7 +245,15 @@ class PDFReportGenerator:
 
             # Risk level
             conf = diagnosis_data['prediction']['confidence_percentage']
-            risk_level = "HIGH RISK — Urgent" if conf > 75 else ("MODERATE RISK" if conf > 60 else "LOW RISK")
+            primary_diag = diagnosis_data['prediction']['primary_diagnosis'].lower()
+            
+            if 'normal' in primary_diag:
+                risk_level = "LOW RISK"
+            elif conf > 65:
+                risk_level = "HIGH RISK — Urgent"
+            else:
+                risk_level = "MODERATE RISK"
+                
             findings_data.append(['Risk Level:', risk_level])
 
             for condition, prob in diagnosis_data['prediction']['all_probabilities'].items():
@@ -441,30 +447,31 @@ class PDFReportGenerator:
             story.append(Paragraph("🔬 What We Found:", self.styles['CustomSubHeader']))
             diagnosis = diagnosis_data['prediction']['primary_diagnosis']
             confidence = diagnosis_data['prediction']['confidence_percentage']
+            diag_lower = diagnosis.lower()
 
-            diagnosis_simple = {
-                'Normal': (
+            if 'normal' in diag_lower:
+                simple_text = (
                     '✅ <b>GOOD NEWS!</b> The ultrasound analysis shows normal fetal development. '
                     'Your baby appears to be growing well. Continue regular prenatal check-ups.'
-                ),
-                'FGR': (
+                )
+            elif 'fgr' in diag_lower or 'restriction' in diag_lower:
+                simple_text = (
                     '⚠️ <b>ATTENTION:</b> The analysis shows signs of Fetal Growth Restriction (FGR) — '
                     'your baby may be growing slower than expected. '
                     'Please consult your doctor immediately for further evaluation.'
-                ),
-                'Abnormalities': (
+                )
+            else:
+                simple_text = (
                     '🔴 <b>IMPORTANT:</b> The analysis detected some unusual findings. '
                     'Your doctor will discuss next steps and additional tests with you. '
                     'Early detection allows for better care — please see your doctor right away.'
                 )
-            }
 
-            simple_text = diagnosis_simple.get(diagnosis, f"The analysis shows: <b>{diagnosis}</b>")
             story.append(Paragraph(simple_text, self.styles['PatientFriendly']))
 
             confidence_text = (
                 f"<b>AI Confidence Level:</b> {confidence:.1f}% — "
-                f"{'High confidence in this result.' if confidence > 75 else 'Moderate confidence — additional clinical tests recommended.'}"
+                f"{'High confidence in this result.' if confidence > 65 else 'Moderate confidence — additional clinical tests recommended.'}"
             )
             story.append(Paragraph(confidence_text, self.styles['PatientFriendly']))
             story.append(Spacer(1, 0.1 * inch))
@@ -495,7 +502,8 @@ class PDFReportGenerator:
             story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#90caf9')))
             story.append(Paragraph("📋 What Should You Do Next?", self.styles['CustomSubHeader']))
 
-            if confidence > 75 and 'Normal' not in diagnosis:
+            is_normal = 'normal' in diag_lower
+            if not is_normal and confidence > 65:
                 next_steps = [
                     ("<b>1. See Your Doctor Immediately</b>", "Your results show concerns. Please schedule an appointment with your OB/GYN right away."),
                     ("<b>2. Bring This Report</b>", "Show this report to your doctor for detailed discussion."),
